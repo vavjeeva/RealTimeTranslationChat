@@ -3,22 +3,75 @@
 @{
     ViewData["Title"] = "Real Time Translation Chat";
 }
-
-<div class="row" style="padding-top:25px">
-    <div class="col-md-3">
-        <form method="post">
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input type="text" asp-for="Name" class="form-control" />
+    <div class="container-fluid" id="divLogin" style="padding-top:20px">
+        <div class="row">
+            <div class="col-md-9" style="height:600px">
+                <div class="panel panel-primary">
+                    <div class="panel-heading" id="accordion">
+                        <span class="glyphicon glyphicon-log-in"></span> Login
+                    </div>
+                    <div class="panel-collapse" id="collapseOne">
+                        <div class="panel-body">
+                            <form method="post">
+                                <div class="form-group row">
+                                    <div class="col-xs-4">
+                                        <label asp-for="user.Name" class="control-label"></label>
+                                        <input id="name" type="text" asp-for="user.Name" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-xs-4">
+                                        <label asp-for="user.LanguagePreference" class="control-label"></label>
+                                        <select asp-for="user.LanguagePreference" class="form-control">
+                                            <option value="">-- Select Language --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group"><input id="btnLogin" class="btn btn-warning btn-sm" type="button" value="Enter Chat" /></div>
+                                <input id="hiddenId" type="hidden" />
+                                <input id="hiddenUserName" type="hidden" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Language" class="control-label"></label>
-                <select asp-for="Language" class="form-control" asp-items="@Model.LanguageSL">
-                    <option value="">-- Select Language --</option>
-                </select>
-            </div>
-            <div class="form-group"><input class="btn btn-default" type="submit" value="Enter Chat" /></div>
-        </form>
+        </div>
     </div>
-</div>
-
+    <div class="container-fluid" id="divChat" style="padding-top:20px">
+        <div class="row">
+            <div class="col-xs-9" style="height:600px">
+                <div class="panel panel-primary">
+                    <div class="panel-heading" id="accordion">
+                        <span class="glyphicon glyphicon-comment"></span> Chat [<span id="spanUserName"></span>]
+                    </div>
+                </div>
+                <div class="panel-group">
+                    <div class="panel-collapse" style="height:550px">
+                        <ul id="messagesList" class="list-group"></ul>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="input-group">
+                            <input id="inputMsg" type="text" class="form-control input-sm" placeholder="Type your message here..." />
+                            <span class="input-group-btn">
+                                <input type="button" class="btn btn-warning btn-sm" id="btnChat" value="Send" style="margin-right:10px" />
+                                <input type="button" class="btn btn-danger btn-sm" id="btnExitChat" value="Exit Chat" />
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-3" style="height:600px">
+                <div class="panel panel-primary">
+                    <div class="panel-heading" id="accordion">
+                        <span class="glyphicon glyphicon-user"></span> Users
+                    </div>
+                    <div class="panel-collapse" style="height:600px">
+                        <ul id="usersList" class="list-group"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="~/lib/signalr/signalr.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/chat.js"></script>
