@@ -24,9 +24,15 @@ function setScreen(isLogin) {
 
 }
 
+$("#inputMsg").keyup(function (event) {
+    if (event.keyCode === 13) {
+        $("#btnChat").click();
+    }
+});
+
 connection.on("onNewUserConnected", (user) => {
     const msg = user + " joined chat."
-    $("#messagesList").append($("<li class='list-group-item'>").html(msg));
+    $("#messagesList").append($("<li class='list-group-item list-group-item-success'>").html(msg));
     $("#usersList").append($("<li class='list-group-item list-group-item-info'>").html("<span class='glyphicon glyphicon-user'></span>&nbsp;" + user));
 });
 
@@ -41,17 +47,16 @@ connection.on("onConnected", (users, name, id) => {
     $('#spanUserName').html(name);
 });
 
-connection.on("onDisconnected", (name) => {    
+connection.on("onDisconnected", (name) => {
     $("#usersList li:contains('" + name + "')").remove();
+    const msg = name + " left chat."
+    $("#messagesList").append($("<li class='list-group-item list-group-item-danger'>").html(msg));
 });
 
-$("#btnLogin").click(function () {
-
-    connection.start().then(function () {
-        connection.invoke("Connect", $("#name").val(), "en").catch(err => console.error(err.toString()));
-        setScreen(true);
-    });
+connection.on("ReceiveMessage", (name, msg) => {
+    $("#messagesList").append($("<li class='list-group-item list-group-item-info'>").html(name + ":" + msg));
 });
+
 
 $("#btnExitChat").click(function () {
 
@@ -65,9 +70,19 @@ $("#btnExitChat").click(function () {
     setScreen(false);
 });
 
-document.getElementById("btnChat").addEventListener("click", event => {
-    const user = document.getElementById("name").innerText;
-    const message = document.getElementById("inputMsg").value;
-    connection.invoke("SendMessage", user, message).catch(err => console.error(err.toString()));
-    event.preventDefault();
+$("#btnChat").click(function () {
+    var msg = $("#inputMsg").val();
+    if (msg.length > 0) {
+        connection.invoke("SendMessage", $("#hiddenUserName").val(), msg).catch(err => console.error(err.toString()));
+        $("#inputMsg").val('');
+        $("#messagesList").append($("<li class='list-group-item list-group-item-warning'>").html($("#hiddenUserName").val() + ":" + msg));
+    }
+});
+
+$("#btnLogin").click(function () {
+
+    connection.start().then(function () {
+        connection.invoke("Connect", $("#name").val(), $("#slLanguage").val()).catch(err => console.error(err.toString()));
+        setScreen(true);
+    });
 });

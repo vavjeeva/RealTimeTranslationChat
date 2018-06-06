@@ -22,7 +22,7 @@
                                 <div class="form-group row">
                                     <div class="col-xs-4">
                                         <label asp-for="user.LanguagePreference" class="control-label"></label>
-                                        <select asp-for="user.LanguagePreference" class="form-control">
+                                        <select id="slLanguage" asp-for="user.LanguagePreference" class="form-control" asp-items="Model.LanguageSL">
                                             <option value="">-- Select Language --</option>
                                         </select>
                                     </div>
